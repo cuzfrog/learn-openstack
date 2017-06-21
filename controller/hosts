@@ -5,13 +5,13 @@ keyserver.ubuntu.com pgp.mit.edu
 172.22.6.95       controller
 
 # compute1
-192.168.0.31       compute1
+172.22.6.31       compute1
 
 # block1
-192.168.0.41       block1
+172.22.6.41       block1
 
 # object1
-192.168.0.51       object1
+172.22.6.51       object1
 
-# object2
-192.168.0.52       object2
+# neutron
+172.22.6.85       neutron
