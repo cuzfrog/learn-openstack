@@ -1,0 +1,6 @@
+http_proxy="http://10.185.128.235:808/"
+https_proxy="https://10.185.128.235:808/"
+ftp_proxy="ftp://10.185.128.235:806/"
+socks_proxy="socks://10.185.128.235:807/"
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
