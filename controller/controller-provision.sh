@@ -13,6 +13,7 @@ apt install -y rabbitmq-server
 rabbitmqctl add_user openstack boss1
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 apt install -y memcached python-memcache
+cp /vagrant/memcached.conf /etc/memcached.conf
 service memcached restart
 
 # Install keystone and bootstrap
