@@ -19,7 +19,7 @@ mysql -u root -e $'GRANT ALL PRIVILEGES ON nova.* TO `nova`@`%` IDENTIFIED BY \'
 
 # Install RabbitMQ and memcached
 apt install -y rabbitmq-server
-rabbitmqctl add_user openstack boss1
+rabbitmqctl add_user openstack rabbitmq_password
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 apt install -y memcached python-memcache
 cp /vagrant/conf/memcached.conf /etc/memcached.conf
@@ -60,3 +60,20 @@ service glance-registry restart
 service glance-api restart
 wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
 openstack image create "cirros" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --public
+
+# Install compute (controller)
+openstack user create --domain default --password nova_password nova
+openstack role add --project service --user nova admin
+openstack service create --name nova --description "OpenStack Compute" compute
+openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
+apt install -y nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
+cp /vagrant/conf/nova.conf /etc/nova/nova.conf
+nova-manage api_db sync nova
+nova-manage db sync nova
+service nova-api restart
+service nova-consoleauth restart
+service nova-scheduler restart
+service nova-conductor restart
+service nova-novncproxy restart
