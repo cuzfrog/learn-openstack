@@ -16,6 +16,9 @@ mysql -u root -e $'GRANT ALL PRIVILEGES ON nova_api.* TO `nova`@`localhost` IDEN
 mysql -u root -e $'GRANT ALL PRIVILEGES ON nova_api.* TO `nova`@`%` IDENTIFIED BY \'nova_password\';'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON nova.* TO `nova`@`localhost` IDENTIFIED BY \'nova_password\';'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON nova.* TO `nova`@`%` IDENTIFIED BY \'nova_password\';'
+mysql -u root -e 'CREATE DATABASE neutron;'
+mysql -u root -e $'GRANT ALL PRIVILEGES ON neutron.* TO `neutron`@`localhost` IDENTIFIED BY \'neutron_password\';'
+mysql -u root -e $'GRANT ALL PRIVILEGES ON neutron.* TO `neutron`@`%` IDENTIFIED BY \'neutron_password\';'
 
 # Install RabbitMQ and memcached
 apt install -y rabbitmq-server
@@ -61,7 +64,7 @@ service glance-api restart
 wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
 openstack image create "cirros" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --public
 
-# Install compute (controller)
+# Setup and Install compute (controller)
 openstack user create --domain default --password nova_password nova
 openstack role add --project service --user nova admin
 openstack service create --name nova --description "OpenStack Compute" compute
@@ -77,3 +80,8 @@ service nova-consoleauth restart
 service nova-scheduler restart
 service nova-conductor restart
 service nova-novncproxy restart
+
+# Setup neutron (controller)
+openstack user create --domain default --password neutron_password neutron
+openstack role add --project service --user neutron admin
+openstack service create --name neutron --description "OpenStack Networking" network
