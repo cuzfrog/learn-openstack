@@ -4,10 +4,11 @@ echo "${username} ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/${username}
 sudo su - ${username}
 
 # Basic provision
-cat /vagrant/hosts > /etc/hosts
-cat /vagrant/envs >> /etc/environment
-cat /vagrant/apt-proxy > /etc/apt/apt.conf
-cp /vagrant/artful-au-sources.list /etc/apt/sources.list
+echo "tmpfs /tmp tmpfs rw,nosuid,nodev,noatime" >> /etc/fstab
+cat /vagrant/env/hosts > /etc/hosts
+cat /vagrant/env/envs >> /etc/environment
+cat /vagrant/env/apt-proxy > /etc/apt/apt.conf
+cp /vagrant/env/artful-au-sources.list /etc/apt/sources.list
 
 # Initialize apt
 apt update
