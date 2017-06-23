@@ -109,4 +109,4 @@ cp /vagrant/conf/cinder.conf /etc/cinder/cinder.conf
 su -s /bin/sh -c "cinder-manage db sync" cinder
 service nova-api restart
 service cinder-scheduler restart
-service cinder-api restart
+#service cinder-api restart #service not found
