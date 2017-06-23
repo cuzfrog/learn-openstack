@@ -19,5 +19,5 @@ apt update
 # Install OpenStack-cli and chrony
 apt install -y python-openstackclient
 apt install -y chrony
-cp /vagrant/chrony.conf /etc/chrony/chrony.conf
+cp /vagrant/conf/chrony.conf /etc/chrony/chrony.conf
 service chrony restart
