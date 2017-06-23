@@ -8,7 +8,16 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false  
-    vb.memory = "2048"
+    vb.memory = "2048"    
+
+    # Get disk path
+    second_disk = '/tmp/block1-disk2.vdi'
+    
+    # Create and attach disk
+    unless File.exist?(second_disk)
+      vb.customize ['createhd', '--filename', second_disk, '--format', 'VDI', '--size', 4 * 1024]
+    end
+    vb.customize ['storageattach', :id, '--storagectl', 'SCSI', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', second_disk]
   end
 
   config.vm.provision "shell", path: "provision.sh"
