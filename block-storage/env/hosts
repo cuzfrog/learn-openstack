@@ -1,0 +1,17 @@
+127.0.0.1       localhost
+keyserver.ubuntu.com pgp.mit.edu
+
+# controller
+172.22.6.95       controller
+
+# compute1
+172.22.6.31       compute1
+
+# block1
+172.22.6.41       block1
+
+# object1
+172.22.6.51       object1
+
+# neutron
+172.22.6.85       neutron

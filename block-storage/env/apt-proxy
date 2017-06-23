@@ -1,0 +1,4 @@
+Acquire::http::proxy "http://10.185.128.235:808/";
+Acquire::https::proxy "https://10.185.128.235:808/";
+Acquire::ftp::proxy "ftp://10.185.128.235:806/";
+Acquire::socks::proxy "socks://10.185.128.235:807/";

@@ -19,6 +19,9 @@ mysql -u root -e $'GRANT ALL PRIVILEGES ON nova.* TO `nova`@`%` IDENTIFIED BY \'
 mysql -u root -e 'CREATE DATABASE neutron;'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON neutron.* TO `neutron`@`localhost` IDENTIFIED BY \'neutron_password\';'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON neutron.* TO `neutron`@`%` IDENTIFIED BY \'neutron_password\';'
+mysql -u root -e 'CREATE DATABASE cinder;'
+mysql -u root -e $'GRANT ALL PRIVILEGES ON cinder.* TO `cinder`@`localhost` IDENTIFIED BY \'cinder_password\';'
+mysql -u root -e $'GRANT ALL PRIVILEGES ON cinder.* TO `cinder`@`%` IDENTIFIED BY \'cinder_password\';'
 
 # Install RabbitMQ and memcached
 apt install -y rabbitmq-server
@@ -85,3 +88,21 @@ service nova-novncproxy restart
 openstack user create --domain default --password neutron_password neutron
 openstack role add --project service --user neutron admin
 openstack service create --name neutron --description "OpenStack Networking" network
+
+# Setup cinder (controller)
+openstack user create --domain default --password cinder_password cinder
+openstack role add --project service --user cinder admin
+openstack service create --name cinder --description "OpenStack Block Storage" volume
+openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
+apt install -y cinder-api cinder-scheduler
+cp /vagrant/conf/cinder.conf /etc/cinder/cinder.conf
+cinder-manage db sync cinder
+service nova-api restart
+service cinder-scheduler restart
+service cinder-api restart
