@@ -76,8 +76,8 @@ openstack endpoint create --region RegionOne compute internal http://controller:
 openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
 apt install -y nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
 cp /vagrant/conf/nova.conf /etc/nova/nova.conf
-nova-manage api_db sync nova
-nova-manage db sync nova
+su -s /bin/sh -c "nova-manage api_db sync" nova
+su -s /bin/sh -c "nova-manage db sync" nova
 service nova-api restart
 service nova-consoleauth restart
 service nova-scheduler restart
@@ -92,17 +92,21 @@ openstack service create --name neutron --description "OpenStack Networking" net
 # Setup cinder (controller)
 openstack user create --domain default --password cinder_password cinder
 openstack role add --project service --user cinder admin
-openstack service create --name cinder --description "OpenStack Block Storage" volume
-openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
-openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s
-openstack endpoint create --region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s
-openstack endpoint create --region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s
-openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s
-openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s
-openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
+#openstack service create --name cinder --description "OpenStack Block Storage" volume
+#openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+#openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s
+#openstack endpoint create --region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s
+#openstack endpoint create --region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s
+#openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s
+#openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s
+#openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
+openstack service create --name cinderv3 --description "OpenStack Block Storage" volumev3
+openstack endpoint create --region RegionOne volumev3 public http://controller:8776/v3/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev3 internal http://controller:8776/v3/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev3 admin http://controller:8776/v3/%\(tenant_id\)s
 apt install -y cinder-api cinder-scheduler
 cp /vagrant/conf/cinder.conf /etc/cinder/cinder.conf
-cinder-manage db sync cinder
+su -s /bin/sh -c "cinder-manage db sync" cinder
 service nova-api restart
 service cinder-scheduler restart
-service cinder-api restart
+#service cinder-api restart

@@ -2,6 +2,7 @@
 username=ubuntu
 echo "${username} ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/${username}
 sudo su - ${username}
+echo 'Defaults env_keep="http_proxy,https_proxy,no_proxy"' > /etc/sudoers.d/env-keep
 
 # Basic provision
 echo "tmpfs /tmp tmpfs rw,nosuid,nodev,noatime" >> /etc/fstab
@@ -11,6 +12,7 @@ cat /vagrant/env/apt-proxy > /etc/apt/apt.conf
 cp /vagrant/env/artful-au-sources.list /etc/apt/sources.list
 
 # Initialize apt
+#apt -o Acquire::https::No-Cache=True -o Acquire::http::No-Cache=True update
 apt update
 apt install -y software-properties-common python-software-properties
 add-apt-repository -y cloud-archive:newton
