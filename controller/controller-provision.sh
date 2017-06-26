@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Setup time sync
+echo "allow 172.22.6.0/24" >> /etc/chrony/chrony.conf
+service chrony restart
+
 # Install mariadb and create keystone database.
 apt install -y mariadb-server python-pymysql
 cp /vagrant/conf/mariadb.conf /etc/mysql/mariadb.conf.d/99-openstack.cnf
