@@ -16,10 +16,13 @@ mysql -u root -e $'GRANT ALL PRIVILEGES ON glance.* TO `glance`@`localhost` IDEN
 mysql -u root -e $'GRANT ALL PRIVILEGES ON glance.* TO `glance`@`%` IDENTIFIED BY \'glance_password\';'
 mysql -u root -e 'CREATE DATABASE nova_api;'
 mysql -u root -e 'CREATE DATABASE nova;'
+mysql -u root -e 'CREATE DATABASE nova_cell0;'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON nova_api.* TO `nova`@`localhost` IDENTIFIED BY \'nova_password\';'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON nova_api.* TO `nova`@`%` IDENTIFIED BY \'nova_password\';'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON nova.* TO `nova`@`localhost` IDENTIFIED BY \'nova_password\';'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON nova.* TO `nova`@`%` IDENTIFIED BY \'nova_password\';'
+mysql -u root -e $'GRANT ALL PRIVILEGES ON nova_cell0.* TO `nova`@`localhost` IDENTIFIED BY \'nova_password\';'
+mysql -u root -e $'GRANT ALL PRIVILEGES ON nova_cell0.* TO `nova`@`%` IDENTIFIED BY \'nova_password\';'
 mysql -u root -e 'CREATE DATABASE neutron;'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON neutron.* TO `neutron`@`localhost` IDENTIFIED BY \'neutron_password\';'
 mysql -u root -e $'GRANT ALL PRIVILEGES ON neutron.* TO `neutron`@`%` IDENTIFIED BY \'neutron_password\';'
@@ -80,6 +83,7 @@ openstack endpoint create --region RegionOne compute internal http://controller:
 openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
 apt install -y nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
 cp /vagrant/conf/nova.conf /etc/nova/nova.conf
+#nova-manage cell_v2 simple_cell_setup
 su -s /bin/sh -c "nova-manage api_db sync" nova
 su -s /bin/sh -c "nova-manage db sync" nova
 service nova-api restart

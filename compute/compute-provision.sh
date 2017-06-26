@@ -6,6 +6,6 @@ service chrony restart
 
 
 apt install -y nova-compute
-#cp /vagrant/conf/nova /etc/nova/nova.conf
-#cp /vagrant/conf/nova-compute.conf /etc/nova/nova-compute.conf
-#service nova-compute restart
+cp /vagrant/conf/nova /etc/nova/nova.conf
+cp /vagrant/conf/nova-compute.conf /etc/nova/nova-compute.conf
+service nova-compute restart
