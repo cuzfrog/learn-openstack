@@ -138,3 +138,13 @@ service nova-api restart
 service cinder-scheduler restart
 #service cinder-api restart #service not found
 echo "cinder setup!"
+
+# Install horizon
+apt install -y python-django openstack-dashboard
+cp /vagrant/conf/local_settings.py /etc/openstack-dashboard/local_settings.py
+service apache2 reload
+
+# Add more user and project
+openstack project create --domain default --description "Demo Project" demo
+openstack user create --domain default --password password1 user1
+openstack role add --project demo --user user1 _member_
