@@ -9,11 +9,12 @@ cat /vagrant/env/apt-proxy > /etc/apt/apt.conf
 cp /vagrant/env/artful-au-sources.list /etc/apt/sources.list
 
 # Initialize apt
-apt -o Acquire::https::No-Cache=True -o Acquire::http::No-Cache=True update
-#apt update
-apt install -y software-properties-common python-software-properties
+#apt -o Acquire::https::No-Cache=True -o Acquire::http::No-Cache=True update
+apt update
+apt install -y software-properties-common python-software-properties > /dev/null
 add-apt-repository -y cloud-archive:newton
-apt -o Acquire::https::No-Cache=True -o Acquire::http::No-Cache=True update
+#apt -o Acquire::https::No-Cache=True -o Acquire::http::No-Cache=True update
+apt update
 
 # Install basic tools
 apt install -y nmap htop linux-headers-$(uname -r) build-essential dkms
