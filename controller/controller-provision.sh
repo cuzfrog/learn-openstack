@@ -75,7 +75,7 @@ cp /vagrant/conf/glance-registry.conf /etc/glance/glance-registry.conf
 su -s /bin/sh -c "glance-manage db_sync" glance
 service glance-registry restart
 service glance-api restart
-wget -quiet http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+wget --quiet http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
 openstack image create "cirros" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --public
 echo "glance and image setup!"
 
