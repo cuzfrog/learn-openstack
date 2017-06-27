@@ -88,7 +88,7 @@ openstack endpoint create --region RegionOne compute internal http://controller:
 openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
 apt install -y nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler > /dev/null
 cp /vagrant/conf/nova.conf /etc/nova/nova.conf
-nova-manage cell_v2 simple_cell_setup
+su -s /bin/sh -c "nova-manage cell_v2 simple_cell_setup"
 su -s /bin/sh -c "nova-manage api_db sync" nova
 su -s /bin/sh -c "nova-manage db sync" nova
 service nova-api restart
@@ -107,7 +107,13 @@ openstack endpoint create --region RegionOne network internal http://controller:
 openstack endpoint create --region RegionOne network admin http://controller:9696
 apt install -y neutron-server neutron-plugin-ml2 > /dev/null
  #neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent
-
+cp /vagrant/conf/neutron.conf /etc/neutron/neutron.conf
+cp /vagrant/conf/ml2_conf.ini /etc/neutron/plugins/ml2/ml2_conf.ini
+su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+service nova-api restart
+service nova-scheduler restart
+service nova-conductor restart
+service neutron-server restart
 echo "neutron setup!"
 
 # Setup cinder (controller)
