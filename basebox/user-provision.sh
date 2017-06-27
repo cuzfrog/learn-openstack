@@ -9,3 +9,4 @@ cp /vagrant/vagrant.pub /home/$username/.ssh/authorized_keys
 chmod 700 /home/$username/.ssh
 chmod 600 /home/$username/.ssh/authorized_keys
 chown -R ${username}:${username} /home/$username/.ssh
+cp /home/ubuntu/.bashrc /home/$username/.bashrc
