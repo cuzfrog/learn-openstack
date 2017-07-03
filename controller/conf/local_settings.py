@@ -8,7 +8,7 @@ from horizon.utils import secret_key
 
 from openstack_dashboard.settings import HORIZON_CONFIG
 
-DEBUG = True
+DEBUG = False
 
 
 # WEBROOT is the location relative to Webserver root
